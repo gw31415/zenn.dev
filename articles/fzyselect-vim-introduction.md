@@ -5,7 +5,7 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics:
   - "vim"
   - "neovim"
-published: false
+published: true
 published_at: "2022-12-16 19:00"
 publication_name: "vim_jp"
 ---
