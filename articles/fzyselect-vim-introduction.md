@@ -2,8 +2,12 @@
 title: "ミニマリストのためのファジーセレクタ fzyselect.vim"
 emoji: "🔎"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Vim", "Neovim"]
+topics:
+  - "vim"
+  - "neovim"
 published: false
+published_at: "2022-12-16 19:00"
+publication_name: "vim_jp"
 ---
 
 この記事は[Vim Advent Calender 2022](https://qiita.com/advent-calendar/2022/vim)の17日目の記事です。
