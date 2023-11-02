@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/gw31415/zenn.dev#readme",
   "dependencies": {
-    "zenn-cli": "^0.1.133"
+    "zenn-cli": "latest"
   }
 }
