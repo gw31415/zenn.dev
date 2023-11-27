@@ -2,8 +2,10 @@
 title: "はじめてのVimConf"
 emoji: ☺️
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: [Vim]
-published: false
+topics:
+  - vim
+  - vimconf
+published: true
 ---
 
 # はじめに
