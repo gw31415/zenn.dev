@@ -4,7 +4,7 @@ emoji: 📏
 type: tech # tech: 技術記事 / idea: アイデア
 topics:
   - vim
-published: false
+published: true
 published_at: "2022-12-13 07:00"
 publication_name: "vim_jp"
 ---
