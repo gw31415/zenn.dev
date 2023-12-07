@@ -5,7 +5,7 @@ type: tech # tech: 技術記事 / idea: アイデア
 topics:
   - vim
 published: true
-published_at: "2023-12-13 07:00"
+published_at: "2023-12-13 00:00"
 publication_name: "vim_jp"
 ---
 
