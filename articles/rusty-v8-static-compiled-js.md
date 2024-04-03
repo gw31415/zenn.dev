@@ -1,5 +1,5 @@
 ---
-title: "V8内蔵でRustからNode.js用JavaScriptを呼び出す & コンパイル済環境を使い回す"
+title: "V8内蔵でRustからMathJaxを呼び出す & コンパイル済環境を使い回す"
 emoji: "🦀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: [V8, Rust, Nodejs, Bun]
@@ -7,7 +7,7 @@ published: true
 published_at: "2024-01-04 12:00"
 ---
 
-今回は、RustでNode.js用の環境を同梱し、Rustから呼びだすことを目指します。
+今回は、MathJaxを呼び出すJavaScriptをRustから呼びだすことを目指します。
 
 # 背景
 
