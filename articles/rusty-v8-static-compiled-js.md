@@ -26,19 +26,19 @@ Node.jsには[MathJax](https://www.mathjax.org)という数式レンダリング
 ## やること
 
 - [`v8`](https://crates.io/crates/v8)(旧`rusty_v8`)クレートを用いる
-    - Denoコミュニティが主たる開発に携っており、信頼も保守の観点からも安心できます。スクリプト実行前にJITコンパイルを行うため、複数回レンダリングする際に工夫ができます(後述)。
+  - Denoコミュニティが主たる開発に携っており、信頼も保守の観点からも安心できます。スクリプト実行前にJITコンパイルを行うため、複数回レンダリングする際に工夫ができます(後述)。
 
 ## やらないこと
 
 - 実行時の動的インポート処理
-    - 今回は実行内容が固定のため事前にバンドルする形にしました。インポート先の実行時解決をする必要がなくなります。
+  - 今回は実行内容が固定のため事前にバンドルする形にしました。インポート先の実行時解決をする必要がなくなります。
 
 ## できなかったこと
 
 - 他の`v8`依存クレートとの競合の解消
-    - `v8`クレートの初期化の関係上、他の`v8`依存クレートと共存することができませんでした。
+  - `v8`クレートの初期化の関係上、他の`v8`依存クレートと共存することができませんでした。
 - HandleScopeとContextScopeの区別
-    - V8の理解の話になりますが、両者の区別について今回は理解に至りませんでした。
+  - V8の理解の話になりますが、両者の区別について今回は理解に至りませんでした。
 
 # 開発
 
@@ -54,6 +54,7 @@ https://zenn.dev/skanehira/articles/2022-11-20-rust-deno-node
 実際に用いたソースコードはこちらです。
 
 :::details TypeScriptモジュール
+
 ```ts
 // [こちらのソースコード](https://github.com/gaato/tex.gaato.net/blob/71242f0aa8e23d26848844d52fd685274f04c738/server.js) の一部を少し改変しています。
 import { mathjax } from "mathjax-full/js/mathjax.js";
@@ -92,15 +93,21 @@ export default function (
   }
 }
 ```
+
 :::
 
 やっていることは単純で、MathJax表現文字列の引数`latex`をSVG文字列に変換して返すだけです。
+
 ```ts
 import { OptionList } from "mathjax-full/js/util/Options";
-export default function (latex: string, options: OptionList | undefined): string;
+export default function (
+  latex: string,
+  options: OptionList | undefined,
+): string;
 ```
 
 こちらのソースコードの依存関係を事前に解決するため、単一ファイルにバンドルします。今回は個人的成り行きで[Bun](https://bun.sh)を用いましたが、[esbuild](https://esbuild.github.io)や[webpack](https://webpack.js.org)を用いてもできると思います(未検証です)。
+
 ```bash
 bun build --outfile=out/index.mjs --minify --target=browser src/index.ts
 ```
@@ -110,23 +117,28 @@ bun build --outfile=out/index.mjs --minify --target=browser src/index.ts
 前節で作成したTypeScriptモジュールは文字列として `v8` に読み込ませることができます。ファイルを文字列としてビルド時に読み込むために `include_str!` マクロを用いました。
 
 ### `v8`クレートの仕組み
+
 `v8`ではソースコードをコンパイルして実行するために、`v8`自体の初期化、`Isolate`, `HandleScope`, `ContextScope` を用意する必要があります。
 
 `Isolate`とは独立した環境のことで、全てのオブジェクトはこの中で完結させる必要があります。
 つまり、別の`Isolate`間で変数などのやりとりはしないということです。
+
 ```rust
 let mut isolate = v8::Isolate::new(Default::default());
 // HandleScopeを追加するためにミュータブルにする
 ```
 
 `HandleScope`や`ContextScope`は変数のスコープを表します。両者の区別については何かあるようですが今回は理解できませんでした。
+
 ```rust
 let scope = &mut v8::HandleScope::new(isolate);
 let context = v8::Context::new(scope);
 let scope = &mut v8::ContextScope::new(scope, context);
 // IsolateからHandleScopeを取得し、ContextScopeに変換する
 ```
+
 `v8`では、「変数の宣言」や「変数への値の格納」など様々な操作に対して `HandleScope` 型の引数をとります。それぞれの操作がどのスコープで行われているのかに対応しているのです。
+
 ```rust
 // Load js file
 let code = include_str!("index.js"); // ファイルからソースコード文字列の取得
@@ -150,7 +162,6 @@ let obj = module
 let func = v8::Local::<v8::Function>::try_from(obj).unwrap();
 ```
 
-
 こちらが公式によるサンプルです。
 
 https://docs.rs/v8/0.81.0/v8/index.html#example
@@ -164,6 +175,7 @@ https://github.com/gw31415/mathjax_svg/blob/30586891018ff1ea321ac816930e1af24b15
 これでも目的は達成できるのですが、これだと `convert_to_svg` を行うたびにRustの `&'static str`で保持されたJSモジュール文字列からコンパイルまでのプロセスを実行してしまうためとても遅くなります。最初の実行までにJSのコンパイルを行い、スコープを使い回すことで複数回コンパイルすることを回避します。
 
 - 改善前
+
 ```mermaid
 flowchart LR
     A[&static str 文字列] --> B[JS文字列]
@@ -175,6 +187,7 @@ flowchart LR
 ```
 
 - 改善後
+
 ```mermaid
 flowchart LR
     A[&static str 文字列] --> B[JS文字列]

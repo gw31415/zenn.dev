@@ -1,8 +1,6 @@
 {
-	"fmt": {
-		"exclude": [
-			"**/*.md"
-		],
-		"useTabs": true
-	}
+  "fmt": {
+    "exclude": ["**/*.md"],
+    "useTabs": true
+  }
 }

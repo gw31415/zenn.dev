@@ -61,9 +61,11 @@ endfunction
 https://github.com/gw31415/scrollUptoLastLine.vim/blob/86b66b588954416cc87292e6ded6a048fb533d34/plugin/plugin.vim#L2-L9
 
 これを書き換えると以下のようにして相対位置を取得していることになります。
+
 ```vim
 return line(a:expr) - line('w0') + 1
 ```
+
 指定した位置とウィンドウ最上行の行数の差をとり1を足すシンプルな実装です。ただし、これだと文字列がWindow幅を越える折り返しに対応できません。
 
 ## 問題2: 折り畳み
@@ -93,6 +95,7 @@ return pos
 ```
 
 `s:lineheight` 関数は指定した行の表示行数を計算する関数です。
+
 - `width` はウィンドウのうち行表示カラムなどを除いた表示箇所の横幅を計算しています。
 - `strdisplaywidth` で行の横幅を計算し、`width` で割ることでその行の縦幅を計算しています。
 

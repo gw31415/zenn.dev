@@ -15,7 +15,6 @@ https://github.com/gw31415/rehype-budoux-paragraph
 
 [Astro.js](https://astro.build) で[個人的に試験勉強に用いているサイト](https://github.com/gw31415/mdblank)を作成しているのですが、長文を多く掲載するため分かち書きが必要になりました。 **せっかくSSGで読み込み時に呼び出される処理を減らしているのに、ブラウザサイドで `<wbr/>` を挿入する操作を行うのはもったいない** と思いました。そこでAstro.jsでStatic Siteを生成する時に分かち書き操作を行なえれば便利だなと思って作りました。
 
-
 :::message
 [`word-break: auto-phrase`](https://caniuse.com/mdn-css_properties_word-break_auto-phrase) が一般的になったとしても、これによってブラウザサイドで `<wbr/>` を挿入する操作を行うのに変わりはないので、この先も使えると思います。
 :::
@@ -26,34 +25,38 @@ https://github.com/gw31415/rehype-budoux-paragraph
 
 ```ts
 visit(tree, "element", (node: any) => {
-    if (node.tagName === "p") { // <p> タグの時
-        // >>>>>>>>>>>>>>> 前処理：ノードの中身のテキストを連結する
-        const processor = unified().use(rehypeStringify);
-        let nodeText = "";
-        for (const child of node.children) {
-            nodeText += processor.stringify(child);
-        }
-        // <<<<<<<<<<<<<<<
-
-        let value: string;
-        switch (options.lang) { // BudouXで処理する
-            case "ja":
-                value = jaParser.translateHTMLString(nodeText);
-                break;
-            case "zh-TW":
-                value = zhtParser.translateHTMLString(nodeText);
-                break;
-            case "zh-CN":
-                value = zhcParser.translateHTMLString(nodeText);
-                break;
-        }
-        node.children = [ // 中身を入れ換える
-            {
-                type: "raw",
-                value: value,
-            },
-        ];
+  if (node.tagName === "p") {
+    // <p> タグの時
+    // >>>>>>>>>>>>>>> 前処理：ノードの中身のテキストを連結する
+    const processor = unified().use(rehypeStringify);
+    let nodeText = "";
+    for (const child of node.children) {
+      nodeText += processor.stringify(child);
     }
+    // <<<<<<<<<<<<<<<
+
+    let value: string;
+    switch (
+      options.lang // BudouXで処理する
+    ) {
+      case "ja":
+        value = jaParser.translateHTMLString(nodeText);
+        break;
+      case "zh-TW":
+        value = zhtParser.translateHTMLString(nodeText);
+        break;
+      case "zh-CN":
+        value = zhcParser.translateHTMLString(nodeText);
+        break;
+    }
+    node.children = [
+      // 中身を入れ換える
+      {
+        type: "raw",
+        value: value,
+      },
+    ];
+  }
 });
 ```
 

@@ -13,7 +13,7 @@ published_at: "2024-05-16 09:00"
 
 https://github.com/gw31415/mstdn.vim
 
- ![mstdn-editor-rec](/images/mstdn-vim-release/mstdn-editor-rec.gif)
+![mstdn-editor-rec](/images/mstdn-vim-release/mstdn-editor-rec.gif)
 
 # 設計
 
@@ -32,9 +32,9 @@ MastodonはWeb系のAPIを叩く必要がありますが、Vim標準の機能で
 使用に関わる部分は、なるべくVimの標準機能に沿ったもの、コマンドを増やさないものにしたいと考えました。具体的には次のような設計にしました。
 
 - `mstdn://ama@example.com/home` のようなURL的スキームを用いて、Mastodonのタイムラインにアクセスできるようにする
-    - `:e mstdn://ama@example.com/home` でタイムラインを開く
+  - `:e mstdn://ama@example.com/home` でタイムラインを開く
 - 投稿に関してはコマンドを増やさず、 `:call` で呼び出せる関数を提供する
-    - 投稿編集画面を開くなどの機能は別途プラグインで提供する
+  - 投稿編集画面を開くなどの機能は別途プラグインで提供する
 
 # 実装
 
@@ -87,18 +87,18 @@ export async function main(denops: Denops): Promise<void> {
 
 ただし、MastodonのAPIはStreaming APIが提供されているタイムラインが限られていたり、通常のTimeline APIとアクセス方法に若干一貫性がありません。
 
-| タイムライン | Timelineのエンドポイント | Streamingで最初にPOSTするデータ |
-| --- | --- | --- |
-| ホーム        | `/api/v1/timelines/home` | `{ "stream": "user" }` |
-| 連合 | `/api/v1/timelines/public?local=false` | `{ "stream": "public" }` |
-| リモート | `/api/v1/timelines/public?local=false&remote=true` | `{ "stream": "public:remote" }` |
-| ローカル | `/api/v1/timelines/public?local=true` | `{ "stream": "public:local" }` |
-| ハッシュタグ(連合)  | `/api/v1/timelines/tag/${タグ名}?local=false` | `{ "stream": "hashtag", "tag": "${タグ名}" }` |
-| ハッシュタグ(ローカル)  | `/api/v1/timelines/tag/${タグ名}?local=true` | `{ "stream": "hashtag:local", "tag": "${タグ名}" }` |
+| タイムライン           | Timelineのエンドポイント                           | Streamingで最初にPOSTするデータ                     |
+| ---------------------- | -------------------------------------------------- | --------------------------------------------------- |
+| ホーム                 | `/api/v1/timelines/home`                           | `{ "stream": "user" }`                              |
+| 連合                   | `/api/v1/timelines/public?local=false`             | `{ "stream": "public" }`                            |
+| リモート               | `/api/v1/timelines/public?local=false&remote=true` | `{ "stream": "public:remote" }`                     |
+| ローカル               | `/api/v1/timelines/public?local=true`              | `{ "stream": "public:local" }`                      |
+| ハッシュタグ(連合)     | `/api/v1/timelines/tag/${タグ名}?local=false`      | `{ "stream": "hashtag", "tag": "${タグ名}" }`       |
+| ハッシュタグ(ローカル) | `/api/v1/timelines/tag/${タグ名}?local=true`       | `{ "stream": "hashtag:local", "tag": "${タグ名}" }` |
 
 - 参考
-    - [timelines API methods](https://docs.joinmastodon.org/methods/timelines/)
-    - [streaming API methods](https://docs.joinmastodon.org/methods/streaming/)
+  - [timelines API methods](https://docs.joinmastodon.org/methods/timelines/)
+  - [streaming API methods](https://docs.joinmastodon.org/methods/streaming/)
 
 そのため、これらの違いを吸収するために、Mastodon APIをプラグインのために`Method`という名で抽象化しました。
 
@@ -162,6 +162,7 @@ denopsを用いるとVimと通信して処理を行えますが、それでも�
 ### TimelineRendererに持たせるメソッド
 
 以下はバッファに一対一対応し更新を引き受ける構造体 `TimelineRenderer` の大まかな設計です。メソッドの中身は省略しています。
+
 ```ts
 interface LoadMore {
   createdAt: string;
@@ -210,7 +211,7 @@ export class TimelineRenderer {
   public async redraw(denops: Denops, view?: WinSaveView) {}
   /** 投稿やLOAD MOREを削除する */
   public async delete(denops: Denops, id: string): Promise<boolean> {}
-}   
+}
 ```
 
 - `statuses` はバッファに紐ついているStatus一覧を返します

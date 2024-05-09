@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/gw31415/zenn.dev#readme",
   "dependencies": {
+    "prettier": "^3.2.5",
     "zenn-cli": "latest"
   }
 }
