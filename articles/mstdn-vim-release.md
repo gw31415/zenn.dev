@@ -2,14 +2,14 @@
 title: "MastodonのVimプラグインを作成した際の設計・実装で工夫したこと"
 emoji: "🐘"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["Vim", "Mastodon", "Deno"]
+topics: ["Vim", "Mastodon", "Deno", "Denops"]
 published: true
-published_at: "2024-05-16 09:00"
+published_at: "2024-05-14 18:00"
 ---
 
-この記事は [MastodonのVimプラグインを作成した際の設計・実装で工夫したこと](https://blog.shinonome.io/mstdn-vim-release/) のクロスポストです。
+<!-- この記事は [MastodonのVimプラグインを作成した際の設計・実装で工夫したこと](https://blog.shinonome.io/mstdn-vim-release/) のクロスポストです。 -->
 
-今回は、VimからMastodonにアクセスするプラグインを作ったので、紹介を兼ねて設計・実装で工夫したことについて書きます。
+今回はVimからMastodonにアクセスするプラグインを作ったので、紹介を兼ねて設計・実装で工夫したことについて書きます。
 
 https://github.com/gw31415/mstdn.vim
 
@@ -73,13 +73,13 @@ import { Denops } from "https://deno.land/x/denops_std@v5.1.0/mod.ts";
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
     async echo(denops: Denops, message: unknown): Promise<void> {
-      await denops.cmd(`echo ${message}`);
+      await denops.cmd(`echo "${message}"`);
     },
   };
 }
 ```
 
-このようにすることで、Vimから `:call denops#request('hoge', 'echo', ['Hello, World!'])` というコマンドを実行することで、 `Hello, World!` というメッセージを表示することができます(`denops/hoge/main.ts`内で登録した `echo` ディスパッチャの引数を前から順に渡している)。
+このようにすることで、Vimから `:call denops#request('hoge', 'echo', ['Hello, World!'])` というコマンドを実行して `Hello, World!` というメッセージを表示することができます(`denops/hoge/main.ts`内で登録した `echo` の引数を前から順に渡している)。
 
 ## Mastodon APIをプラグインのために抽象化する
 
@@ -143,7 +143,7 @@ export interface Method {
 }
 ```
 
-Methodはstreamやendpointを持つものと宣言しています。これを implements することで、非同期更新と同期的取得を同じインターフェースで扱うこととしました。
+Methodはstreamやendpointを持つものと宣言しています。これを implements することで、非同期更新と同期的取得をまとめた構造体として扱うこととしました。
 
 実際に抽象化されたMethodオブジェクトは以下の部分に宣言しています。
 
