@@ -13,6 +13,8 @@ published_at: "2024-05-16 09:00"
 
 https://github.com/gw31415/mstdn.vim
 
+ ![mstdn-editor-rec](/images/mstdn-vim-release/mstdn-editor-rec.gif)
+
 # 設計
 
 ## バックエンド
@@ -227,8 +229,6 @@ https://github.com/gw31415/mstdn-editor.vim
 投稿編集用バッファの操作感としては、保存処理 (`:w`, `:wq`, `ZZ`, ...)をした際にタイムラインバッファに投稿を追加する、というものです。これは `BufWriteCmd` の自動コマンドを用いることで実装します。
 
 https://github.com/gw31415/mstdn-editor.vim/blob/a4533096ad75e124356f169d12724823e3192fb2/autoload/mstdn/editor.vim#L22-L37
-
- ![mstdn-editor-rec](/images/mstdn-vim-release/mstdn-editor-rec.gif)
 
 # 最後に
 
