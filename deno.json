@@ -1,6 +1,0 @@
-{
-  "fmt": {
-    "exclude": ["**/*.md"],
-    "useTabs": true
-  }
-}
