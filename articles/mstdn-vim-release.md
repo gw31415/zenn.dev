@@ -231,6 +231,74 @@ https://github.com/gw31415/mstdn-editor.vim
 
 https://github.com/gw31415/mstdn-editor.vim/blob/a4533096ad75e124356f169d12724823e3192fb2/autoload/mstdn/editor.vim#L22-L37
 
+## 画像のプレビュー
+
+Mastodonは画像を添付できるため、画像のプレビューを表示する機能も欲しくなります。しかし、VimはEmacsのように画像を表示する機能が標準で備わっていません。画像の表示のアプローチはいくつかありますが、今回はVim内で画像を表示したいため SIXEL を利用しました。
+SIXELを利用すると対応している端末(WeztermやiTerm2)であればSIXEL形式の文字列を `echoraw` (Neovimなら `chansend`) に渡すことで画像を表示することができます。
+
+SIXEL対応端末は限られているため、とりあえずは画像のSIXEL化までDenoで行い、あとは各自の設定に任せる設計にしてあります。
+
+:::details 設定例
+
+```vim
+const s:FONTHEIGHT = 14
+const s:FONTWIDTH = s:FONTHEIGHT / 2
+const s:RETINA_SCALE = 2
+
+autocmd BufReadCmd mstdn://* call s:mstdn_config()
+
+" Neovimの場合はchansendを、Vimの場合はechorawを使う
+let s:echoraw = has('nvim')
+			\ ? {str->chansend(v:stderr, str)}
+			\ : {str->echoraw(str)}
+
+" 画像のプレビューを終了・画像を消去する
+function s:refresh() abort
+	if exists('b:img_index')
+		unlet b:img_index
+	endif
+	exec "norm! \<ESC>\<C-l>"
+endfunction
+
+" 画像を表示する
+function s:display_sixel(sixel, lnum, cnum) abort
+	call s:echoraw("\x1b[s")
+	call s:echoraw("\x1b[" . a:lnum . ";" . a:cnum . "H" . a:sixel)
+	call s:echoraw("\x1b[u")
+endfunction
+
+function s:preview_cur_img(next) abort
+	if !exists('b:img_index')
+		let b:img_index = 0
+	else
+		let b:img_index = b:img_index + a:next
+	endif
+	let ww = winwidth('.')
+	let wh = winheight('.')
+	let maxWidth = ww * s:FONTWIDTH / 2 * s:RETINA_SCALE
+	let maxHeight = wh * s:FONTHEIGHT / 2 * s:RETINA_SCALE
+  " 画像の取得：mstdn#timeline#img_sixelを提供しています
+  " 第一引数は何番目の画像か、第二引数はプレビューかオリジナルか、第三引数はサイズ関連のオプションにしています
+	let source = mstdn#timeline#img_sixel(b:img_index, v:true, #{maxWidth: maxWidth, maxHeight: maxHeight})
+	if type(source) == type(v:null)
+		let b:img_index = b:img_index - a:next
+		lua vim.notify("No image found", vim.log.levels.ERROR)
+		return
+	endif
+
+	cal s:display_sixel(source['data'], 0, 0)
+	au CursorMoved,CursorMovedI,BufLeave <buffer> ++once call s:refresh() " カーソル移動時に画像を消去
+endfunction
+
+nn <buffer> <C-k> <cmd>call <SID>preview_cur_img(-1)<cr>
+nn <buffer> <C-j> <cmd>call <SID>preview_cur_img(+1)<cr>
+```
+
+:::
+
+参考
+https://zenn.dev/vim_jp/articles/358848a5144b63
+
 # 最後に
 
 要点については以上です。このように、VimでMastodonのような特定のプラットフォームに依存するようなプラグインを作成するのには Denops は本当に強いなと感じました。
