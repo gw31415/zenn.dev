@@ -249,45 +249,45 @@ autocmd BufReadCmd mstdn://* call s:mstdn_config()
 
 " Neovimの場合はchansendを、Vimの場合はechorawを使う
 let s:echoraw = has('nvim')
-			\ ? {str->chansend(v:stderr, str)}
-			\ : {str->echoraw(str)}
+      \ ? {str->chansend(v:stderr, str)}
+      \ : {str->echoraw(str)}
 
 " 画像のプレビューを終了・画像を消去する
 function s:refresh() abort
-	if exists('b:img_index')
-		unlet b:img_index
-	endif
-	exec "norm! \<ESC>\<C-l>"
+  if exists('b:img_index')
+    unlet b:img_index
+  endif
+  exec "norm! \<ESC>\<C-l>"
 endfunction
 
 " 画像を表示する
 function s:display_sixel(sixel, lnum, cnum) abort
-	call s:echoraw("\x1b[s")
-	call s:echoraw("\x1b[" . a:lnum . ";" . a:cnum . "H" . a:sixel)
-	call s:echoraw("\x1b[u")
+  call s:echoraw("\x1b[s")
+  call s:echoraw("\x1b[" . a:lnum . ";" . a:cnum . "H" . a:sixel)
+  call s:echoraw("\x1b[u")
 endfunction
 
 function s:preview_cur_img(next) abort
-	if !exists('b:img_index')
-		let b:img_index = 0
-	else
-		let b:img_index = b:img_index + a:next
-	endif
-	let ww = winwidth('.')
-	let wh = winheight('.')
-	let maxWidth = ww * s:FONTWIDTH / 2 * s:RETINA_SCALE
-	let maxHeight = wh * s:FONTHEIGHT / 2 * s:RETINA_SCALE
+  if !exists('b:img_index')
+    let b:img_index = 0
+  else
+    let b:img_index = b:img_index + a:next
+  endif
+  let ww = winwidth('.')
+  let wh = winheight('.')
+  let maxWidth = ww * s:FONTWIDTH / 2 * s:RETINA_SCALE
+  let maxHeight = wh * s:FONTHEIGHT / 2 * s:RETINA_SCALE
   " 画像の取得：mstdn#timeline#img_sixelを提供しています
   " 第一引数は何番目の画像か、第二引数はプレビューかオリジナルか、第三引数はサイズ関連のオプションにしています
-	let source = mstdn#timeline#img_sixel(b:img_index, v:true, #{maxWidth: maxWidth, maxHeight: maxHeight})
-	if type(source) == type(v:null)
-		let b:img_index = b:img_index - a:next
-		lua vim.notify("No image found", vim.log.levels.ERROR)
-		return
-	endif
+  let source = mstdn#timeline#img_sixel(b:img_index, v:true, #{maxWidth: maxWidth, maxHeight: maxHeight})
+  if type(source) == type(v:null)
+    let b:img_index = b:img_index - a:next
+    lua vim.notify("No image found", vim.log.levels.ERROR)
+    return
+  endif
 
-	cal s:display_sixel(source['data'], 0, 0)
-	au CursorMoved,CursorMovedI,BufLeave <buffer> ++once call s:refresh() " カーソル移動時に画像を消去
+  cal s:display_sixel(source['data'], 0, 0)
+  au CursorMoved,CursorMovedI,BufLeave <buffer> ++once call s:refresh() " カーソル移動時に画像を消去
 endfunction
 
 nn <buffer> <C-k> <cmd>call <SID>preview_cur_img(-1)<cr>
