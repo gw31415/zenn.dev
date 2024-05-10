@@ -257,7 +257,7 @@ function s:refresh() abort
   if exists('b:img_index')
     unlet b:img_index
   endif
-  exec "norm! \<ESC>\<C-l>"
+  exec "norm! \<C-l>"
 endfunction
 
 " 画像を表示する
@@ -289,6 +289,9 @@ function s:preview_cur_img(next) abort
   cal s:display_sixel(source['data'], 0, 0)
   au CursorMoved,CursorMovedI,BufLeave <buffer> ++once call s:refresh() " カーソル移動時に画像を消去
 endfunction
+
+" 画像のプレビューをESCで閉じるためのキーマッピング
+nn <buffer> <ESC> <ESC><cmd>call <SID>refresh()<cr>
 
 nn <buffer> <C-k> <cmd>call <SID>preview_cur_img(-1)<cr>
 nn <buffer> <C-j> <cmd>call <SID>preview_cur_img(+1)<cr>
