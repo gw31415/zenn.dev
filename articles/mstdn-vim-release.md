@@ -11,6 +11,11 @@ published_at: "2024-05-14 18:00"
 
 今回はVimからMastodonにアクセス・投稿・表示するプラグインを作ったので、紹介を兼ねて設計・実装で工夫したことについて書きます。
 
+- 実装した機能
+  - タイムライン
+  - 投稿作成バッファ
+  - 画像のプレビュー
+
 https://github.com/gw31415/mstdn.vim
 
 ![mstdn-editor-rec](/images/mstdn-vim-release/mstdn-editor-rec.gif)
@@ -34,7 +39,7 @@ MastodonはWeb系のAPIを叩く必要がありますが、Vim標準の機能で
 - `mstdn://ama@example.com/home` のようなURL的スキームを用いて、Mastodonのタイムラインにアクセスできるようにする
   - `:e mstdn://ama@example.com/home` でタイムラインを開く
 - 投稿に関してはコマンドを増やさず、 `:call` で呼び出せる関数を提供する
-  - 投稿編集画面を開くなどの機能は別途プラグインで提供する
+  - 投稿作成画面を開くなどの機能は別途プラグインで提供する
 - 画像のプレビューはSIXELを利用し、対応している端末で画像を表示する
 
 # 実装
@@ -294,7 +299,7 @@ endfunction
 
 
 " 画像のプレビューをESCで閉じる
-nn <buffer> <ESC> <ESC><cmd>call <SID>refresh()<cr>
+nn <buffer> <ESC> <ESC><cmd>call <SID>clear()<cr>
 " 画像のプレビューをC-j, C-kで切り替える
 nn <buffer> <C-k> <cmd>call <SID>preview_cur_img(-1)<cr>
 nn <buffer> <C-j> <cmd>call <SID>preview_cur_img(+1)<cr>
