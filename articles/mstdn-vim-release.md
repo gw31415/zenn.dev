@@ -255,46 +255,46 @@ const s:RETINA_SCALE = 2
 " b:img_indexは現在何番目の画像を表示しているかを保持する
 
 function s:clear() abort
-	if exists('b:img_index')
-		unlet b:img_index
-	endif
-	call sixel_view#clear()
+  if exists('b:img_index')
+    unlet b:img_index
+  endif
+  call sixel_view#clear()
 endfunction
 
 function s:preview_cur_img(next) abort
   " 倍率の計算
-	let ww = winwidth('.')
-	let wh = winheight('.')
-	let maxWidth = ww * s:FONTWIDTH / 2 * s:RETINA_SCALE
-	let maxHeight = wh * s:FONTHEIGHT / 2 * s:RETINA_SCALE
+  let ww = winwidth('.')
+  let wh = winheight('.')
+  let maxWidth = ww * s:FONTWIDTH / 2 * s:RETINA_SCALE
+  let maxHeight = wh * s:FONTHEIGHT / 2 * s:RETINA_SCALE
 
   " 画像のURLを抽出
   let imgs = mstdn#timeline#status()['mediaAttachments']
       \ ->filter({_, v -> v['type'] == 'image'})
-	if len(imgs) == 0
-		lua vim.notify("No image found", vim.log.levels.ERROR)
-		return
-	endif
+  if len(imgs) == 0
+    lua vim.notify("No image found", vim.log.levels.ERROR)
+    return
+  endif
 
   " 画像のインデックスを更新
   " b:img_indexを画像の数で割った余りを取ることでループさせる
-	if !exists('b:img_index')
-		let b:img_index = 0
-	else
-		let b:img_index = b:img_index + a:next
-	endif
-	let index = b:img_index % len(imgs)
-	if index < 0
-		let index = len(imgs) + index
-	endif
+  if !exists('b:img_index')
+    let b:img_index = 0
+  else
+    let b:img_index = b:img_index + a:next
+  endif
+  let index = b:img_index % len(imgs)
+  if index < 0
+    let index = len(imgs) + index
+  endif
 
-	let key = 'preview_url' " or 'url'
-	let url = imgs[index][key]
-	
+  let key = 'preview_url' " or 'url'
+  let url = imgs[index][key]
+
   " 画像を表示
-	call sixel_view#view(url, #{maxWidth: maxWidth, maxHeight: maxHeight}, 0, 0)
+  call sixel_view#view(url, #{maxWidth: maxWidth, maxHeight: maxHeight}, 0, 0)
   " カーソルを移動させることで画像を閉じる
-	au CursorMoved,CursorMovedI,BufLeave <buffer> ++once call s:clear()
+  au CursorMoved,CursorMovedI,BufLeave <buffer> ++once call s:clear()
 endfunction
 
 
