@@ -4,7 +4,7 @@ emoji: "🐘"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Vim", "Mastodon", "Deno", "Denops", "Sixel"]
 published: true
-published_at: "2024-05-14 18:00"
+published_at: "2024-05-15 00:00"
 publication_name: "vim_jp"
 ---
 
