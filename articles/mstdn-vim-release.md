@@ -5,6 +5,7 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["Vim", "Mastodon", "Deno", "Denops", "Sixel"]
 published: true
 published_at: "2024-05-14 18:00"
+publication_name: "vim_jp"
 ---
 
 <!-- この記事は [MastodonのVimプラグインを作成した際の設計・実装で工夫したこと](https://blog.shinonome.io/mstdn-vim-release/) のクロスポストです。 -->
