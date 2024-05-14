@@ -79,7 +79,7 @@ TypeScript関数を適宜呼び出す際は、Denopsオブジェクトのdispatc
 import { Denops } from "https://deno.land/x/denops_std@v5.1.0/mod.ts";
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
-    async echo(denops: Denops, message: unknown): Promise<void> {
+    async echo(message: unknown): Promise<void> {
       await denops.cmd(`echo "${message}"`);
     },
   };
