@@ -1,37 +1,34 @@
-lockfileVersion: "9.0"
+lockfileVersion: '9.0'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
 importers:
+
   .:
     dependencies:
       prettier:
-        specifier: ^3.2.5
-        version: 3.2.5
+        specifier: ^3.4.1
+        version: 3.4.1
       zenn-cli:
-        specifier: latest
-        version: 0.1.153
+        specifier: ^0.1.158
+        version: 0.1.158
 
 packages:
-  prettier@3.2.5:
-    resolution:
-      {
-        integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==,
-      }
-    engines: { node: ">=14" }
+
+  prettier@3.4.1:
+    resolution: {integrity: sha512-G+YdqtITVZmOJje6QkXQWzl3fSfMxFwm1tjTyo9exhkmWSqC4Yhd1+lug++IlR2mvRVAxEDDWYkQdeSztajqgg==}
+    engines: {node: '>=14'}
     hasBin: true
 
-  zenn-cli@0.1.153:
-    resolution:
-      {
-        integrity: sha512-MLIdtRW2arQBuVCKlWrMF4eFZGkvmswrcc0OvgxmQs9w9/9rODfoyFK9nQQwrgyUwlxDzhUa/oAO6nks4GY5DA==,
-      }
-    engines: { node: ">=14.0.0" }
+  zenn-cli@0.1.158:
+    resolution: {integrity: sha512-bvQ96fK+9qw+SKxEmncg/rYU+1u0V6Bh+HuV8By+u4L+VZt/jn9hFyL+KWj/2ncSBDtcEBo6XLsCdNLxlUo+RA==}
+    engines: {node: '>=14.0.0'}
     hasBin: true
 
 snapshots:
-  prettier@3.2.5: {}
 
-  zenn-cli@0.1.153: {}
+  prettier@3.4.1: {}
+
+  zenn-cli@0.1.158: {}
