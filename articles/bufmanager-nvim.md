@@ -8,6 +8,10 @@ published_at: "2024-12-05 00:00"
 publication_name: "vim_jp"
 ---
 
+:::message
+この記事は[Vim Advent Calender 2024 - Qiita](https://qiita.com/advent-calendar/2024/vim)の5日目の記事です。
+:::
+
 こんにちは！皆さんはVimのマルチバッファ機能は使っていますか？今回は、Neovimのバッファをファジーファインダで管理するプラグインを作ったので、その紹介をします。
 
 ![Bufmanager-Screenshot](/images/bufmanager-nvim/bufmanager.gif)
