@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"fmt": "markdownlint-cli2 ./articles/**/*.md --fix"
+		"fmt": "markdownlint-cli2 ./articles/**/*.md --fix",
+		"dev": "zenn preview"
 	},
 	"repository": {
 		"type": "git",
