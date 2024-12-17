@@ -20,7 +20,6 @@
 	"homepage": "https://github.com/gw31415/zenn.dev#readme",
 	"dependencies": {
 		"markdownlint-cli2": "^0.16.0",
-		"prettier": "^3.4.1",
 		"zenn-cli": "^0.1.158"
 	},
 	"markdownlint-cli2": {
