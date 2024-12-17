@@ -28,7 +28,7 @@ publication_name: "vim_jp"
 
 # 特徴
 
-## 1. `vim.ui.select`に対応する関数しか提供しない。
+## 1. `vim.ui.select`に対応する関数しか提供しない
 
 本質として汎用性が必要であるファジーセレクタをミニマリスト向けにするためには、その汎用性に合理性があるものでなくてはなりません。つまり、**プラグイン作者の自作仕様には疑いの余地がある**のです。したがって今回fzyselect.vimを開発するにあたり、仕様について次のことを遵守することにしました。
 
@@ -36,7 +36,7 @@ publication_name: "vim_jp"
 
 `vim.ui.select`はNeovimで標準とされているインタフェースですので、これに遵守することはオレオレインタフェースを自作するよりも合理的です。これは多くのミニマリストを満足させることでしょう。
 
-## 2. デフォルトソースを同梱しない。
+## 2. デフォルトソースを同梱しない
 
 ユーザーにとって要らないソースは同梱するべきではありません。このため、デフォルトソースやキーマップは何ひとつとして同梱しておりません。
 
@@ -45,24 +45,24 @@ publication_name: "vim_jp"
 
 ```vim
 fu! s:fzyselect_lsfiles() abort
-	let out = system(['git', 'ls-files'])
-	if v:shell_error
-		echo out
-	el
-		cal fzyselect#start(split(out, '\n'), #{prompt:'git ls-files'}, {p-><SID>edit(p)})
-	en
+  let out = system(['git', 'ls-files'])
+  if v:shell_error
+    echo out
+  el
+    cal fzyselect#start(split(out, '\n'), #{prompt:'git ls-files'}, {p-><SID>edit(p)})
+  en
 endfunction
 fu! s:edit(path) abort
-	if a:path != v:null
-		exe 'e ' .. a:path
-	en
+  if a:path != v:null
+    exe 'e ' .. a:path
+  en
 endfunction
 nnoremap <c-p> <cmd>cal <SID>fzyselect_lsfiles()<cr>
 ```
 
 その他需要が高いと思われる設定は[README.md](https://github.com/gw31415/fzyselect.vim/blob/main/README.md#configuration-example)に公開しています。
 
-## 3. `matchfuzzypos`の使用。
+## 3. `matchfuzzypos`の使用
 
 ファジーマッチ及びハイライトはVim組みこみの関数:`matchfuzzypos`によって行います。組みこみ関数のため高速で、かつ車輪の再発明となっていないことがポイントです。
 
@@ -78,9 +78,9 @@ nnoremap <c-p> <cmd>cal <SID>fzyselect_lsfiles()<cr>
 Plug 'gw31415/fzyselect.vim'
 " 中略
 fu! s:fzy_keymap()
-	nmap <buffer> i <Plug>(fzyselect-fzy)
-	nmap <buffer> <cr> <Plug>(fzyselect-retu)
-	nmap <buffer> <esc> <cmd>clo<cr>
+  nmap <buffer> i <Plug>(fzyselect-fzy)
+  nmap <buffer> <cr> <Plug>(fzyselect-retu)
+  nmap <buffer> <esc> <cmd>clo<cr>
 endfu
 au FileType fzyselect cal <SID>fzy_keymap()
 ```
