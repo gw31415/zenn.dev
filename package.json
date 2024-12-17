@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"format": "prettier --write ."
+		"fmt": "markdownlint-cli2 ./articles/**/*.md --fix"
 	},
 	"repository": {
 		"type": "git",
