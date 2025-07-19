@@ -1,11 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "zenn.dev",
   "version": "1.0.0",
   "private": true,
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "fmt": "markdownlint-cli2 ./articles/**/*.md --fix",
+    "fix": "markdownlint-cli2 ./articles/**/*.md --fix",
     "dev": "zenn preview"
   },
   "repository": {
