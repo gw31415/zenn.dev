@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/gw31415/zenn.dev#readme",
   "dependencies": {
-    "markdownlint-cli2": "^0.18.1",
-    "zenn-cli": "^0.2.1"
+    "markdownlint-cli2": "^0.20.0",
+    "zenn-cli": "^0.2.11"
   },
   "markdownlint-cli2": {
     "config": {
